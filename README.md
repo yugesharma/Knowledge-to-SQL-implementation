@@ -7,7 +7,7 @@
 
 **[2024/05] Our paper is accepted as a findings paper in ACL2024!**
 
-We propose a novel framework **Knowledge-to-SQL** that leverages **Data Expert Large Language Model (DELLM)** to enhance SQL generation, the paper is available [here]().
+We propose a novel framework **Knowledge-to-SQL** that leverages **Data Expert Large Language Model (DELLM)** to enhance SQL generation, the paper is available [here](https://aclanthology.org/2024.findings-acl.653.pdf).
 
 <img src="./slides/Framework.png" alt="Framework" style="zoom:150%;" />
 
