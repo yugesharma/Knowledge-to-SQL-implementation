@@ -1,0 +1,6 @@
+dataset_list:
+  - name: processed_train
+    file_name: processed_train.json
+    file_path: ./processed_train.json
+    type: custom
+    template: llama2

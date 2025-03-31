@@ -1,0 +1,986 @@
+
+03/28/2025 08:22:27 - WARNING - src.extras.callbacks - Previous log file in this folder will be deleted.
+  0%|          | 0/822 [00:00<?, ?it/s]/home/ysharma/.conda/envs/dellm/lib/python3.11/site-packages/torch/utils/checkpoint.py:429: UserWarning: torch.utils.checkpoint: please pass in use_reentrant=True or use_reentrant=False explicitly. The default value of use_reentrant will be updated to be False in the future. To maintain current behavior, pass use_reentrant=True. It is recommended that you use use_reentrant=False. Refer to docs for more details on the differences between the two variants.
+  warnings.warn(
+
+
+
+
+
+
+
+
+  1%|          | 9/822 [01:52<2:44:42, 12.16s/it]
+
+
+
+
+
+
+
+
+
+
+  2%|▏         | 19/822 [03:54<2:42:46, 12.16s/it]
+
+
+
+
+
+
+
+
+
+
+  4%|▎         | 29/822 [05:57<2:43:23, 12.36s/it]
+
+
+
+
+
+
+
+
+
+
+  5%|▍         | 39/822 [07:59<2:38:30, 12.15s/it]
+
+
+
+
+
+
+
+
+
+
+  6%|▌         | 49/822 [10:01<2:38:26, 12.30s/it]
+
+
+
+
+
+
+
+
+
+
+  7%|▋         | 59/822 [12:01<2:33:21, 12.06s/it]
+
+
+
+
+
+
+
+
+
+
+  8%|▊         | 69/822 [14:03<2:31:47, 12.09s/it]
+
+
+
+
+
+
+
+
+
+
+ 10%|▉         | 79/822 [16:05<2:31:22, 12.22s/it]
+
+
+
+
+
+
+
+
+
+
+ 11%|█         | 89/822 [18:05<2:26:11, 11.97s/it]
+
+
+
+
+
+
+
+
+
+
+ 12%|█▏        | 99/822 [20:09<2:28:58, 12.36s/it]
+
+
+
+
+
+
+
+
+
+
+ 13%|█▎        | 109/822 [22:10<2:23:51, 12.11s/it]
+
+
+
+
+
+
+
+
+
+
+ 14%|█▍        | 119/822 [24:09<2:19:36, 11.92s/it]
+
+
+
+
+
+
+
+
+
+
+ 16%|█▌        | 129/822 [26:12<2:19:48, 12.11s/it]
+
+
+
+
+
+
+
+
+
+
+ 17%|█▋        | 139/822 [28:11<2:16:14, 11.97s/it]
+
+
+
+
+
+
+
+
+
+
+
+ 18%|█▊        | 150/822 [30:23<2:11:49, 11.77s/it]
+
+
+
+
+
+
+
+
+
+
+ 19%|█▉        | 160/822 [32:25<2:14:56, 12.23s/it]
+
+
+
+
+
+
+
+
+
+
+ 21%|██        | 170/822 [34:25<2:11:29, 12.10s/it]
+
+
+
+
+
+
+
+
+
+
+ 22%|██▏       | 180/822 [36:27<2:11:44, 12.31s/it]
+
+
+
+
+
+
+
+
+
+
+ 23%|██▎       | 190/822 [38:27<2:08:47, 12.23s/it]
+
+
+
+
+
+
+
+
+
+
+ 24%|██▍       | 200/822 [40:28<2:05:57, 12.15s/it]
+
+
+
+
+
+
+
+
+
+
+ 26%|██▌       | 210/822 [42:30<2:02:38, 12.02s/it]
+
+
+
+
+
+
+
+
+
+
+ 27%|██▋       | 220/822 [44:33<2:02:13, 12.18s/it]
+
+
+
+
+
+
+
+
+
+
+ 28%|██▊       | 230/822 [46:36<2:00:04, 12.17s/it]
+
+
+
+
+
+
+
+
+
+
+ 29%|██▉       | 240/822 [48:38<1:58:27, 12.21s/it]
+
+
+
+
+
+
+
+
+
+
+ 30%|███       | 250/822 [50:38<1:55:28, 12.11s/it]
+
+
+
+
+
+
+
+
+
+
+ 32%|███▏      | 260/822 [52:38<1:51:47, 11.94s/it]
+
+
+
+
+
+
+
+
+
+
+ 33%|███▎      | 270/822 [54:38<1:49:43, 11.93s/it]
+
+
+
+
+
+
+
+
+
+
+ 34%|███▍      | 280/822 [56:39<1:48:23, 12.00s/it]
+
+
+
+
+
+
+
+
+
+
+ 35%|███▌      | 290/822 [58:38<1:46:15, 11.98s/it]
+
+
+
+
+
+
+
+
+
+
+ 36%|███▋      | 300/822 [1:00:40<1:48:19, 12.45s/it]
+
+
+
+
+
+
+
+
+
+
+ 38%|███▊      | 310/822 [1:02:42<1:43:44, 12.16s/it]
+
+
+
+
+
+
+
+
+
+
+ 39%|███▉      | 320/822 [1:04:45<1:42:55, 12.30s/it]
+
+
+
+
+
+
+
+
+
+ 40%|████      | 329/822 [1:06:33<1:38:41, 12.01s/it]
+
+
+
+
+
+
+
+
+
+
+ 41%|████      | 339/822 [1:08:35<1:37:18, 12.09s/it]
+
+
+
+
+
+
+
+
+
+
+ 42%|████▏     | 349/822 [1:10:37<1:34:49, 12.03s/it]
+
+
+
+
+
+
+
+
+
+
+ 44%|████▎     | 359/822 [1:12:38<1:32:26, 11.98s/it]
+
+
+
+
+
+
+
+
+
+
+ 45%|████▍     | 369/822 [1:14:39<1:30:02, 11.93s/it]
+
+
+
+
+
+
+
+
+
+
+ 46%|████▌     | 379/822 [1:16:40<1:29:36, 12.14s/it]
+
+
+
+
+
+
+
+
+
+
+ 47%|████▋     | 389/822 [1:18:42<1:27:50, 12.17s/it]
+
+
+
+
+
+
+
+
+
+
+ 49%|████▊     | 399/822 [1:20:44<1:25:32, 12.13s/it]
+
+
+
+
+
+
+
+
+
+
+ 50%|████▉     | 409/822 [1:22:46<1:22:18, 11.96s/it]
+
+
+
+
+
+
+
+
+
+
+ 51%|█████     | 419/822 [1:24:48<1:21:35, 12.15s/it]
+
+
+
+
+
+
+
+
+
+
+ 52%|█████▏    | 429/822 [1:26:50<1:19:42, 12.17s/it]
+
+
+
+
+
+
+
+
+
+
+
+ 54%|█████▎    | 440/822 [1:29:02<1:16:44, 12.05s/it]
+
+
+
+
+
+
+
+
+
+ 55%|█████▍    | 449/822 [1:30:51<1:13:58, 11.90s/it]
+
+
+
+
+
+
+
+
+
+
+
+ 56%|█████▌    | 460/822 [1:33:05<1:14:00, 12.27s/it]
+
+
+
+
+
+
+
+
+
+
+ 57%|█████▋    | 470/822 [1:35:07<1:11:27, 12.18s/it]
+
+
+
+
+
+
+
+
+
+
+ 58%|█████▊    | 480/822 [1:37:07<1:07:42, 11.88s/it]
+
+
+
+
+
+
+
+
+
+
+ 60%|█████▉    | 490/822 [1:39:07<1:05:54, 11.91s/it]
+
+
+
+
+
+
+
+
+
+ 61%|██████    | 500/822 [1:41:09<1:04:36, 12.04s/it][INFO|trainer.py:2936] 2025-03-28 10:03:36,643 >> Saving model checkpoint to ./output/llama2-13b-sft/tmp-checkpoint-500
+/home/ysharma/.conda/envs/dellm/lib/python3.11/site-packages/huggingface_hub/file_download.py:797: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+[INFO|configuration_utils.py:729] 2025-03-28 10:03:37,264 >> loading configuration file config.json from cache at /home/ysharma/.cache/huggingface/hub/models--meta-llama--Llama-2-13b-hf/snapshots/5c31dfb671ce7cfe2d7bb7c04375e44c55e815b1/config.json
+[INFO|configuration_utils.py:792] 2025-03-28 10:03:37,266 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-13b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 5120,
+  "initializer_range": 0.02,
+  "intermediate_size": 13824,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 40,
+  "num_hidden_layers": 40,
+  "num_key_value_heads": 40,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "rope_theta": 10000.0,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.37.2",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+[INFO|tokenization_utils_base.py:2433] 2025-03-28 10:03:37,358 >> tokenizer config file saved in ./output/llama2-13b-sft/tmp-checkpoint-500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2442] 2025-03-28 10:03:37,367 >> Special tokens file saved in ./output/llama2-13b-sft/tmp-checkpoint-500/special_tokens_map.json
+/home/ysharma/.conda/envs/dellm/lib/python3.11/site-packages/torch/utils/checkpoint.py:429: UserWarning: torch.utils.checkpoint: please pass in use_reentrant=True or use_reentrant=False explicitly. The default value of use_reentrant will be updated to be False in the future. To maintain current behavior, pass use_reentrant=True. It is recommended that you use use_reentrant=False. Refer to docs for more details on the differences between the two variants.
+  warnings.warn(
+{'loss': 1.0637, 'learning_rate': 1.1991604986516195e-05, 'epoch': 1.82}
+
+
+
+
+
+
+
+
+ 62%|██████▏   | 509/822 [1:42:58<1:02:12, 11.92s/it]
+
+
+
+
+
+
+
+
+
+
+ 63%|██████▎   | 519/822 [1:44:58<1:00:29, 11.98s/it]
+
+
+
+
+
+
+
+
+
+
+ 64%|██████▍   | 529/822 [1:47:00<58:56, 12.07s/it]
+
+
+
+
+
+
+
+
+
+
+ 66%|██████▌   | 539/822 [1:49:01<58:01, 12.30s/it]
+
+
+
+
+
+
+
+
+
+
+ 67%|██████▋   | 549/822 [1:51:03<54:52, 12.06s/it]
+
+
+
+
+
+
+
+
+
+
+ 68%|██████▊   | 559/822 [1:53:04<53:41, 12.25s/it]
+
+
+
+
+
+
+
+
+
+
+
+ 69%|██████▉   | 570/822 [1:55:18<51:12, 12.19s/it]
+
+
+
+
+
+
+
+
+
+ 70%|███████   | 579/822 [1:57:06<48:10, 11.89s/it]
+
+
+
+
+
+
+
+
+
+
+ 72%|███████▏  | 589/822 [1:59:08<46:46, 12.05s/it]
+
+
+
+
+
+
+
+
+
+
+ 73%|███████▎  | 599/822 [2:01:10<46:26, 12.49s/it]
+
+
+
+
+
+
+
+
+
+
+ 74%|███████▍  | 609/822 [2:03:13<43:44, 12.32s/it]
+
+
+
+
+
+
+
+
+
+
+ 75%|███████▌  | 619/822 [2:05:13<40:39, 12.02s/it]
+
+
+
+
+
+
+
+
+
+
+ 77%|███████▋  | 629/822 [2:07:14<38:33, 11.99s/it]
+
+
+
+
+
+
+
+
+
+
+ 78%|███████▊  | 639/822 [2:09:13<36:13, 11.88s/it]
+
+
+
+
+
+
+
+
+
+
+ 79%|███████▉  | 649/822 [2:11:14<35:12, 12.21s/it]
+
+
+
+
+
+
+
+
+
+
+ 80%|████████  | 659/822 [2:13:13<32:07, 11.82s/it]
+
+
+
+
+
+
+
+
+
+
+ 81%|████████▏ | 669/822 [2:15:16<31:06, 12.20s/it]
+
+
+
+
+
+
+
+
+
+
+ 83%|████████▎ | 679/822 [2:17:17<29:02, 12.18s/it]
+
+
+
+
+
+
+
+
+
+
+
+ 84%|████████▍ | 690/822 [2:19:30<26:27, 12.02s/it]
+
+
+
+
+
+
+
+
+
+
+ 85%|████████▌ | 700/822 [2:21:32<25:01, 12.31s/it]
+
+
+
+
+
+
+
+
+
+
+ 86%|████████▋ | 710/822 [2:23:33<22:38, 12.13s/it]
+
+
+
+
+
+
+
+
+
+
+ 88%|████████▊ | 720/822 [2:25:36<20:49, 12.25s/it]
+
+
+
+
+
+
+
+
+
+ 89%|████████▊ | 729/822 [2:27:26<18:59, 12.26s/it]
+
+
+
+
+
+
+
+
+
+
+ 90%|████████▉ | 739/822 [2:29:26<16:38, 12.02s/it]
+
+
+
+
+
+
+
+
+
+
+ 91%|█████████ | 749/822 [2:31:26<14:41, 12.07s/it]
+
+
+
+
+
+
+
+
+
+
+ 92%|█████████▏| 759/822 [2:33:27<12:32, 11.94s/it]
+
+
+
+
+
+
+
+
+
+
+ 94%|█████████▎| 769/822 [2:35:28<10:49, 12.26s/it]
+
+
+
+
+
+
+
+
+
+
+ 95%|█████████▍| 779/822 [2:37:30<08:43, 12.18s/it]
+
+
+
+
+
+
+
+
+
+
+ 96%|█████████▌| 789/822 [2:39:31<06:38, 12.09s/it]
+
+
+
+
+
+
+
+
+
+
+ 97%|█████████▋| 799/822 [2:41:31<04:35, 11.96s/it]
+
+
+
+
+
+
+
+
+
+
+ 98%|█████████▊| 809/822 [2:43:35<02:38, 12.23s/it]
+
+
+
+
+
+
+
+
+
+
+100%|█████████▉| 819/822 [2:45:37<00:36, 12.08s/it]
+
+
+100%|█████████▉| 821/822 [2:46:01<00:12, 12.03s/it]
+100%|██████████| 822/822 [2:46:14<00:00, 12.16s/it][INFO|trainer.py:1962] 2025-03-28 11:08:41,604 >>
+Training completed. Do not forget to share your model on huggingface.co/models =)
+100%|██████████| 822/822 [2:46:14<00:00, 12.13s/it]
+[INFO|trainer.py:2936] 2025-03-28 11:08:41,619 >> Saving model checkpoint to ./output/llama2-13b-sft
+/home/ysharma/.conda/envs/dellm/lib/python3.11/site-packages/huggingface_hub/file_download.py:797: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+[INFO|configuration_utils.py:729] 2025-03-28 11:08:46,551 >> loading configuration file config.json from cache at /home/ysharma/.cache/huggingface/hub/models--meta-llama--Llama-2-13b-hf/snapshots/5c31dfb671ce7cfe2d7bb7c04375e44c55e815b1/config.json
+[INFO|configuration_utils.py:792] 2025-03-28 11:08:46,553 >> Model config LlamaConfig {
+  "_name_or_path": "meta-llama/Llama-2-13b-hf",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 1,
+  "eos_token_id": 2,
+  "hidden_act": "silu",
+  "hidden_size": 5120,
+  "initializer_range": 0.02,
+  "intermediate_size": 13824,
+  "max_position_embeddings": 4096,
+  "model_type": "llama",
+  "num_attention_heads": 40,
+  "num_hidden_layers": 40,
+  "num_key_value_heads": 40,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": null,
+  "rope_theta": 10000.0,
+  "tie_word_embeddings": false,
+  "torch_dtype": "float16",
+  "transformers_version": "4.37.2",
+  "use_cache": true,
+  "vocab_size": 32000
+}
+***** train metrics *****
+  epoch                    =       2.99
+  train_loss               =     1.3242
+  train_runtime            = 2:46:21.04
+  train_samples_per_second =       2.64
+  train_steps_per_second   =      0.082
+[INFO|tokenization_utils_base.py:2433] 2025-03-28 11:08:46,643 >> tokenizer config file saved in ./output/llama2-13b-sft/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2442] 2025-03-28 11:08:46,648 >> Special tokens file saved in ./output/llama2-13b-sft/special_tokens_map.json
+[INFO|modelcard.py:452] 2025-03-28 11:08:46,684 >> Dropping the following result as it does not have all the necessary fields:
+{'task': {'name': 'Causal Language Modeling', 'type': 'text-generation'}}

@@ -270,15 +270,14 @@ if __name__ == '__main__':
     args_parser.add_argument('--output_path', type=str, default='')
     args = args_parser.parse_args()
 
-    eval_data = json.load(open(args.eval_path, 'r'))
-
+    eval_data = json.load(open(args.data_path, 'r'))
+    print(eval_data)
     question_list, db_path_list, knowledge_list = decouple_question_schema(datasets=eval_data,
                                                                            db_root_path=args.db_root_path)
     assert len(question_list) == len(db_path_list) == len(knowledge_list)
 
     json_withSubTable = []
-    for i in tqdm(range(len(args.data_path))):
-        instance = args.data_path[i]
+    for i, instance in enumerate(eval_data):
         db_id = instance['db_id']
         question = instance['question']
         db_path = args.db_root_path + db_id + "/" + db_id + ".sqlite"
