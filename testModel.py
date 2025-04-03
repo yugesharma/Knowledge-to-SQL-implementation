@@ -36,16 +36,25 @@ def generate_knowledge(prompt, model, tokenizer):
     generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
     return generated_text.split("###Assistant:")[-1].strip()
 
-# Hardcoded test inputs
-user_question = "List doctors who have treated more than 10 patients with diabetes."
-database_schema = "TABLE patients (patient_id, name, age, gender, diagnosis) TABLE visits (visit_id, patient_id, doctor_id, hospital_id, visit_date) TABLE doctors (doctor_id, name, specialization) TABLE hospitals (hospital_id, name, location)"
+# Get the database schema once
+database_schema = "TABLE patients (patient_id, name, age, gender, diagnosis, doctor_id, hospital_id) TABLE visits (visit_id, patient_id, doctor_id, hospital_id, visit_date) TABLE doctors (doctor_id, name, specialization) TABLE hospitals (hospital_id, name, location)"
+print("Database schema loaded.")
 
-# Construct the prompt
-prompt = f"""###Human: {user_question} {database_schema}
+# Start a loop to get user questions
+while True:
+    user_question = input("\nEnter your question (or type 'exit' to quit): ")
+    
+    # Check if the user wants to exit
+    if user_question.lower() == "exit":
+        print("Exiting the program. Goodbye!")
+        break
+    
+    # Construct the prompt
+    prompt = f"""###Human: {user_question} {database_schema}
 ###Assistant:"""
-
-# Generate and print knowledge
-generated_knowledge = generate_knowledge(prompt, model, tokenizer)
-print("Generated Knowledge:")
-print(generated_knowledge)
+    
+    # Generate and print knowledge
+    generated_knowledge = generate_knowledge(prompt, model, tokenizer)
+    print("\nGenerated Knowledge:")
+    print(generated_knowledge)
 
