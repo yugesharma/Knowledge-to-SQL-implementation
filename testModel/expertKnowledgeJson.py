@@ -1,13 +1,13 @@
+import json
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
 import os
-import argparse
 import re
-from rapidfuzz import fuzz
+import argparse
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
+from rapidfuzz import fuzz, process
 
-# Define the hardcoded schema
 SCHEMA = """DROP TABLE IF EXISTS PATIENTS;
 CREATE TABLE PATIENTS
 (
@@ -229,21 +229,16 @@ CREATE TABLE TRANSFERS
     INTIME TIMESTAMP(0) NOT NULL,
     OUTTIME TIMESTAMP(0),
     FOREIGN KEY(HADM_ID) REFERENCES ADMISSIONS(HADM_ID)
-);
-"""
+);"""
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Generate expert knowledge for a natural language question")
-    parser.add_argument("--model_path", type=str, default="../output/llama2-13b-dpo",
-                        help="Path to the DPO+SFT trained model")
-    parser.add_argument("--base_model", type=str, default="meta-llama/Llama-2-13b-chat-hf",
-                        help="Base model path")
-    parser.add_argument("--temperature", type=float, default=0.6,
-                        help="Temperature for generation")
-    parser.add_argument("--max_tokens", type=int, default=4096,
-                        help="Maximum number of tokens to generate")
-    parser.add_argument("--output_file", type=str, default="expert_knowledge_output.txt",
-                        help="File to save the generated knowledge")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input_json", type=str, required=True, help="Input JSON file with questions and SQL")
+    parser.add_argument("--output_json", type=str, required=True, help="Output JSON file")
+    parser.add_argument("--model_path", type=str, default="../output/llama2-13b-dpo")
+    parser.add_argument("--base_model", type=str, default="meta-llama/Llama-2-13b-chat-hf")
+    parser.add_argument("--temperature", type=float, default=0.6)
+    parser.add_argument("--max_tokens", type=int, default=512)
     return parser.parse_args()
 
 def load_model(args):
@@ -282,32 +277,18 @@ def extract_tables_and_columns(schema):
     return tables
 
 SYNONYM_MAP = {
-    # Patients table
+    # General Entities
     "patient": "subject_id",
     "patients": "subject_id",
     "patient id": "subject_id",
+    "patient identifier": "subject_id",
     "person": "subject_id",
     "people": "subject_id",
-    "date of birth": "dob",
-    "birth date": "dob",
-    "dob": "dob",
-    "born": "dob",
-    "date of death": "dod",
-    "death date": "dod",
-    "dod": "dod",
-    "died": "dod",
-    "gender": "gender",
-    "sex": "gender",
-    "female": "gender",
-    "male": "gender",
-    "woman": "gender",
-    "man": "gender",
 
-    # Admissions table
+    # Admissions
     "admission": "admissions",
     "admissions": "admissions",
     "admission id": "hadm_id",
-    "hadm id": "hadm_id",
     "admit id": "hadm_id",
     "admit time": "admittime",
     "admission time": "admittime",
@@ -317,12 +298,30 @@ SYNONYM_MAP = {
     "admission type": "admission_type",
     "admission location": "admission_location",
     "discharge location": "discharge_location",
+
+    # Demographics
+    "gender": "gender",
+    "sex": "gender",
+    "female": "gender",
+    "male": "gender",
+    "woman": "gender",
+    "man": "gender",
+    "birth date": "dob",
+    "date of birth": "dob",
+    "dob": "dob",
+    "born": "dob",
+    "age": "age",
+    "date of death": "dod",
+    "dod": "dod",
+    "died": "dod",
+    "died in hospital": "dod",
+
+    # Insurance & Status
     "insurance": "insurance",
     "medicare": "insurance",
     "marital status": "marital_status",
     "ethnicity": "ethnicity",
     "language": "language",
-    "age": "age",
 
     # Diagnoses
     "diagnosis": "diagnoses_icd",
@@ -335,7 +334,6 @@ SYNONYM_MAP = {
     "diagnosis date": "charttime",
     "diagnosis time": "charttime",
     "diagnosis id": "row_id",
-    "diagnosis category": "short_title",
 
     # Procedures
     "procedure": "procedures_icd",
@@ -424,7 +422,6 @@ SYNONYM_MAP = {
     "id": "row_id"
 }
 
-
 def expand_question_with_synonyms(question):
     # Replace synonyms/phrases in the question with schema terms
     q = question.lower()
@@ -497,58 +494,41 @@ Knowledge:"""
 
 def main():
     args = parse_args()
+    # Load model and tokenizer
     model, tokenizer = load_model(args)
-    print("\n=== Expert Knowledge Generator ===")
-    print("Enter your natural language question (or 'quit' to exit):")
-    while True:
-        question = input("\nQuestion: ")
-        if question.lower() in ['quit', 'exit', 'q']:
-            print("Exiting program.")
-            break
-        if not question.strip():
-            print("Please enter a valid question.")
-            continue
-
-        # Step 1: Parse schema and extract relevant tables/columns
-        tables = extract_tables_and_columns(SCHEMA)
-        relevant = select_relevant_tables_and_columns(question, tables, top_k=5)
-        if relevant:
-            print("\nRelevant tables and columns for your question:")
-            for table, cols in relevant.items():
-                print(f"  {table}: {', '.join(cols)}")
-        else:
-            print("\nNo relevant tables or columns found for your question.")
-            continue
-
-        # Step 2: Build reduced schema
+    # Load input JSON
+    with open(args.input_json, "r") as f:
+        data = json.load(f)
+    tables = extract_tables_and_columns(SCHEMA)
+    output = []
+    for entry in data:
+        question = entry["question"]
+        # 1. Extract relevant tables/columns and confidence
+        relevant, confidence = select_relevant_tables_and_columns(question, tables, top_k=5)
+        # 2. Build reduced schema
         reduced_schema = build_reduced_schema(SCHEMA, relevant)
-        print("\n=== Reduced Schema Extracted ===")
-        print(reduced_schema)
-
-        # Step 3: Generate expert knowledge using only relevant schema
-        print("\nGenerating expert knowledge...")
-        try:
-            knowledge = generate_knowledge(
-                question,
-                reduced_schema,
-                model,
-                tokenizer,
-                max_new_tokens=args.max_tokens,
-                temperature=args.temperature
-            )
-            print("\n=== Generated Expert Knowledge ===")
-            print(knowledge)
-            with open(args.output_file, "a") as f:
-                f.write(f"Question: {question}\n\n")
-                f.write("Relevant Tables and Columns:\n")
-                for table, cols in relevant.items():
-                    f.write(f"  {table}: {', '.join(cols)}\n")
-                f.write(f"\nReduced Schema:\n{reduced_schema}\n\n")
-                f.write(f"Expert Knowledge:\n{knowledge}\n\n")
-                f.write("-" * 80 + "\n\n")
-            print(f"\nKnowledge saved to {args.output_file}")
-        except Exception as e:
-            print(f"Error generating knowledge: {e}")
+        # 3. Generate expert knowledge
+        expert_knowledge = generate_knowledge(
+            question,
+            reduced_schema,
+            model,
+            tokenizer,
+            max_new_tokens=args.max_tokens,
+            temperature=args.temperature
+        )
+        output.append({
+            "category": entry["category"],
+            "question": entry["question"],
+            "sql": entry["sql"],
+            "relevant_schema": reduced_schema,
+            "expert_knowledge": expert_knowledge,
+            "confidence": confidence
+        })
+        print(f"Processed: {question} | Confidence: {confidence:.2f}")
+    # Write output JSON
+    with open(args.output_json, "w") as f:
+        json.dump(output, f, indent=2)
+    print(f"Results written to {args.output_json}")
 
 if __name__ == "__main__":
     main()
