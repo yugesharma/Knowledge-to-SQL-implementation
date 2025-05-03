@@ -1,0 +1,9 @@
+{
+    "processed_train": {
+        "file_name": "processed_train.json",
+        "file_path": "./processed_train.json",
+        "type": "custom",
+        "task": "sql_generation",
+        "template": "llama2"
+    }
+}
