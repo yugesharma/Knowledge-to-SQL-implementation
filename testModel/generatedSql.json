@@ -1,0 +1,137 @@
+[
+  {
+    "category": "basic",
+    "question": "How many patients are there in the database?",
+    "sql": "SELECT COUNT(DISTINCT subject_id) AS total_patients FROM patients;",
+    "relevant_schema": "",
+    "expert_knowledge": "* The database contains information about patients, including their names, addresses, and ages.\n* The name of the table is \"patients\".\n* The table has columns for \"name\", \"address\", and \"age\".",
+    "confidence": 0.0,
+    "generated_sql": "SELECT COUNT(*) FROM PATIENTS;"
+  },
+  {
+    "category": "basic",
+    "question": "List all admissions with their admission and discharge times.",
+    "sql": "SELECT hadm_id, admittime, dischtime FROM admissions;",
+    "relevant_schema": "CREATE TABLE ADMISSIONS (\n\n    ADMISSION_TYPE VARCHAR(50) NOT NULL,\n\n    ADMISSION_LOCATION VARCHAR(50) NOT NULL,\n\n    DISCHARGE_LOCATION VARCHAR(50)\n);",
+    "expert_knowledge": "* Admission and discharge times are stored as DATE fields;\n* The desired output should include the admission date, discharge date, and the difference between the two dates (in days).",
+    "confidence": 0.09645285846821916,
+    "generated_sql": "SELECT HADM_ID, ADMITTIME, DISCHTIME FROM ADMISSIONS [This question was answered by user: Kyle M.](https://stackoverflow.com/a/14597537);"
+  },
+  {
+    "category": "conditional",
+    "question": "Show female patients born after January 1, 2000.",
+    "sql": "SELECT subject_id, dob FROM patients WHERE gender = 'F' AND dob > '2000-01-01';",
+    "relevant_schema": "",
+    "expert_knowledge": "* Patient ID is a unique identifier for each patient;\n* Gender is either 'M' for male or 'F' for female;\n* Date of Birth is a date field representing the patient's birthday;\n* born after January 1, 2000 refers to patients where the Date of Birth is greater than January 1, 2000.",
+    "confidence": 0.0,
+    "generated_sql": "SELECT GENDER, DOB FROM PATIENTS WHERE DOB > '2000-01-01' AND GENDER = 'F';"
+  },
+  {
+    "category": "conditional",
+    "question": "Find emergency admissions with \"MEDICARE\" insurance.",
+    "sql": "SELECT hadm_id, admittime FROM admissions WHERE admission_type = 'EMERGENCY' AND insurance = 'MEDICARE';",
+    "relevant_schema": "",
+    "expert_knowledge": "* Emergency admission refers to patients who have been admitted to the hospital through the emergency department.\n* Insurance refers to the type of insurance coverage the patient has; MEDICARE is a specific type of insurance coverage.",
+    "confidence": 0.0,
+    "generated_sql": "SELECT * FROM ADMISSIONS WHERE ADMISSION_TYPE = \"Emergency\" AND INSURANCE = \"MEDICARE\";"
+  },
+  {
+    "category": "conditional",
+    "question": "List patients who died in the hospital (DOD is not null).",
+    "sql": "SELECT subject_id, dod FROM patients WHERE dod IS NOT NULL;",
+    "relevant_schema": "",
+    "expert_knowledge": "* Patients are identified by their patient_id;\n* DOD stands for date of death;",
+    "confidence": 0.0,
+    "generated_sql": "SELECT * FROM PATIENTS WHERE DOD IS NOT NULL;"
+  },
+  {
+    "category": "time",
+    "question": "Show admissions occurring in the year 2100.",
+    "sql": "SELECT hadm_id, admittime FROM admissions WHERE EXTRACT(YEAR FROM admittime) = 2100;",
+    "relevant_schema": "",
+    "expert_knowledge": "* Admissions have a start_date column that indicates the date when the admission starts;\n* The year 2100 is represented by the value 2100 in the start_date column.",
+    "confidence": 0.0,
+    "generated_sql": "SELECT * FROM ADMISSIONS WHERE STARTDATE = 2100;"
+  },
+  {
+    "category": "time",
+    "question": "Find prescriptions started in December 2130.",
+    "sql": "SELECT drug, dose_val_rx FROM prescriptions WHERE EXTRACT(MONTH FROM startdate) = 12 AND EXTRACT(YEAR FROM startdate) = 2130;",
+    "relevant_schema": "",
+    "expert_knowledge": "* Prescriptions are represented by the table \"Prescriptions\"\n* The date a prescription was started is stored in the \"StartDate\" column\n* The year 2130 refers to the year 2013",
+    "confidence": 0.0,
+    "generated_sql": "SELECT * FROM Prescriptions WHERE StartDate = '2013-12-01 00:00:00';"
+  },
+  {
+    "category": "time",
+    "question": "List diagnoses recorded on March 15, 2125.",
+    "sql": "SELECT d.long_title FROM diagnoses_icd di JOIN d_icd_diagnoses d ON di.icd9_code = d.icd9_code WHERE DATE(di.charttime) = '2125-03-15';",
+    "relevant_schema": "",
+    "expert_knowledge": "* The database is called \"patient_data\";\n* The table name is \"patients\";\n* The column names are: patient_id, first_name, last_name, date_of_birth, diagnosis;\n* The date format is MM/DD/YYYY;\n* The desired output is the diagnosis of patients who have a date of birth of 3/15/1990.",
+    "confidence": 0.0,
+    "generated_sql": "SELECT diagnosis FROM patient_data.patients WHERE date_of_birth = '03/15/2125';"
+  },
+  {
+    "category": "nested",
+    "question": "Find patients who never received prescriptions.",
+    "sql": "SELECT subject_id FROM patients WHERE subject_id NOT IN (SELECT DISTINCT subject_id FROM prescriptions);",
+    "relevant_schema": "",
+    "expert_knowledge": "* patient_id (primary key)\n* first_name\n* last_name\n* date_of_birth\n* gender\n* address\n prescription refers to any medication that is ordered by a doctor for a patient; a patient who never received a prescription is one who has no medication orders.",
+    "confidence": 0.0,
+    "generated_sql": "SELECT * FROM PATIENTS WHERE NOT EXISTS (SELECT * FROM PRESCRIPTIONS WHERE PATIENTS.SUBJECT_ID = PRESCRIPTIONS.SUBJECT_ID);"
+  },
+  {
+    "category": "nested",
+    "question": "Show admissions with ICU stays longer than 7 days.",
+    "sql": "SELECT hadm_id FROM icustays WHERE (outtime - intime) > INTERVAL '7 days';",
+    "relevant_schema": "",
+    "expert_knowledge": "* Admission ID (primary key)\n* Patient ID (foreign key referencing Patient ID)\n* Date of Admission (when the patient was admitted)\n* Date of Discharge (when the patient was discharged)\n* ICU stay refers to the duration of time the patient spent in the intensive care unit (ICU); this is calculated as the difference between the Date of Discharge and Date of Admission.",
+    "confidence": 0.0,
+    "generated_sql": "SELECT * FROM ADMISSIONS WHERE ICU_STAY > 7;"
+  },
+  {
+    "category": "nested",
+    "question": "List patients who underwent \"Appendectomy\" procedures.",
+    "sql": "SELECT p.subject_id FROM patients p WHERE EXISTS (SELECT 1 FROM procedures_icd pi JOIN d_icd_procedures dp ON pi.icd9_code = dp.icd9_code WHERE pi.subject_id = p.subject_id AND dp.short_title = 'Appendectomy');",
+    "relevant_schema": "",
+    "expert_knowledge": "* Procedure name \"Appendectomy\" refers to the surgical removal of the appendix;\n* Patient ID is a unique identifier for each patient;\n* Procedure ID refers to the specific procedure performed on each patient.",
+    "confidence": 0.0,
+    "generated_sql": "SELECT DISTINCT PATIENTS.SUBJECT_ID FROM PATIENTS JOIN ADMISSIONS ON PATIENTS.SUBJECT_ID = ADMISSIONS.SUBJECT_ID JOIN PROCEDURES_ICD ON ADMISSIONS.HADM_ID = PROCEDURES_ICD.HADM_ID JOIN D_ICD_PROCEDURES ON PROCEDURES_ICD.ICD9_CODE = D_ICD_PROCEDURES.ICD9_CODE WHERE D_ICD_PROCEDURES.SHORT_TITLE = \"Appendectomy\";"
+  },
+  {
+    "category": "slightly complex",
+    "question": "Show average lab values for \"Glucose\" tests.",
+    "sql": "SELECT AVG(valuenum) AS avg_glucose FROM labevents WHERE itemid = (SELECT itemid FROM d_labitems WHERE label = 'Glucose');",
+    "relevant_schema": "",
+    "expert_knowledge": "* \"Glucose\" is a test type;\n* \"lab values\" refers to the result of the test;\n* the result is a numerical value;\n* we want to show the average of the results for \"Glucose\" tests.",
+    "confidence": 0.0,
+    "generated_sql": "SELECT AVG(VALUE) FROM LABEVENTS WHERE EVENT_TYPE = \"Glucose\";"
+  },
+  {
+    "category": "slightly complex",
+    "question": "Calculate total cost per admission for medication events.",
+    "sql": "SELECT c.hadm_id, SUM(c.cost) AS total_med_cost FROM cost c JOIN prescriptions p ON c.event_id = p.row_id WHERE c.event_type = 'MEDICATION' GROUP BY c.hadm_id;",
+    "relevant_schema": "CREATE TABLE ADMISSIONS (\n\n    ADMISSION_TYPE VARCHAR(50) NOT NULL,\n\n    ADMISSION_LOCATION VARCHAR(50) NOT NULL\n);\n\nCREATE TABLE COST (\n\n    COST DOUBLE PRECISION NOT NULL\n);",
+    "expert_knowledge": "* Medication events refer to ADMISSION_TYPE = 'MEDICATION';\n* Total cost per admission refers to the sum of all costs associated with each admission, divided by the number of admissions.",
+    "confidence": 0.10008711836415331,
+    "generated_sql": "SELECT AVG(COST) FROM COST WHERE EVENT_TYPE = 'MEDICATION';"
+  },
+  {
+    "category": "complex",
+    "question": "Find ICU patients diagnosed with \"Diabetes\" and their total costs.",
+    "sql": "SELECT i.subject_id, SUM(c.cost) AS total_cost FROM icustays i JOIN diagnoses_icd di ON i.hadm_id = di.hadm_id JOIN d_icd_diagnoses dd ON di.icd9_code = dd.icd9_code JOIN cost c ON di.row_id = c.event_id WHERE dd.short_title LIKE '%Diabetes%' GROUP BY i.subject_id;",
+    "relevant_schema": "",
+    "expert_knowledge": "* Patients can have multiple diagnoses (diagnosis_id)\n* Diagnosis \"Diabetes\" is represented by diagnosis_id = 1\n* Total costs include the sum of all costs for a patient, which are stored in the costs column of the patients table.",
+    "confidence": 0.0,
+    "generated_sql": "SELECT SUBJECT_ID, SUM(COST) FROM PATIENTS AS P, DIAGNOSES_ICD AS D WHERE P.SUBJECT_ID = D.SUBJECT_ID AND D.ICD9_CODE = 1 GROUP BY SUBJECT_ID;"
+  },
+  {
+    "category": "complex",
+    "question": "Show average age at admission by diagnosis category.",
+    "sql": "WITH diagnosis_groups AS (SELECT di.hadm_id, dd.short_title, AVG(a.age) AS avg_age FROM diagnoses_icd di JOIN d_icd_diagnoses dd ON di.icd9_code = dd.icd9_code JOIN admissions a ON di.hadm_id = a.hadm_id GROUP BY di.hadm_id, dd.short_title) SELECT short_title, AVG(avg_age) AS overall_avg_age FROM diagnosis_groups GROUP BY short_title;",
+    "relevant_schema": "CREATE TABLE ADMISSIONS (\n\n    ADMISSION_TYPE VARCHAR(50) NOT NULL,\n\n    ADMISSION_LOCATION VARCHAR(50) NOT NULL,\n\n    LANGUAGE VARCHAR(10),\n\n    AGE INT NOT NULL\n);",
+    "expert_knowledge": "* Diagnosis category refers to the value in the DIAGNOSIS column;\n* average age at admission is calculated by dividing the sum of the ages of all patients in a particular diagnosis category by the number of patients in that category.",
+    "confidence": 0.10008711836415331,
+    "generated_sql": "SELECT AVG(AGE) FROM PATIENTS, ADMISSIONS, DIAGNOSES_ICD WHERE PATIENTS.SUBJECT_ID = ADMISSIONS.SUBJECT_ID AND ADMISSIONS.HADM_ID = DIAGNOSES_ICD.HADM_ID AND DIAGNOSES_ICD.EVENT_TYPE = 'D' GROUP BY DIAGNOSES_ICD.ICD9_CODE;"
+  }
+]

@@ -1,0 +1,143 @@
+Question: How many patients are there in the database?
+
+Relevant Tables and Columns:
+  ADMISSIONS: HADM_ID, DISCHTIME, DISCHARGE_LOCATION, ETHNICITY
+  D_ICD_DIAGNOSES: SHORT_TITLE
+
+Reduced Schema:
+CREATE TABLE ADMISSIONS (
+
+    HADM_ID INT NOT NULL UNIQUE,
+
+    DISCHTIME TIMESTAMP(0),
+
+    DISCHARGE_LOCATION VARCHAR(50),
+
+    ETHNICITY VARCHAR(200) NOT NULL
+);
+
+CREATE TABLE D_ICD_DIAGNOSES (
+
+    SHORT_TITLE VARCHAR(50) NOT NULL
+);
+
+Expert Knowledge:
+To answer the question, we need to count the number of rows in the ADMISSIONS table.
+
+--------------------------------------------------------------------------------
+
+Question: List all admissions with their admission and discharge times
+
+Relevant Tables and Columns:
+  ADMISSIONS: ADMISSION_LOCATION, DISCHARGE_LOCATION, LANGUAGE, MARITAL_STATUS
+  D_ICD_DIAGNOSES: SHORT_TITLE
+
+Reduced Schema:
+CREATE TABLE ADMISSIONS (
+
+    ADMISSION_LOCATION VARCHAR(50) NOT NULL,
+
+    DISCHARGE_LOCATION VARCHAR(50),
+
+    LANGUAGE VARCHAR(10),
+
+    MARITAL_STATUS VARCHAR(50)
+);
+
+CREATE TABLE D_ICD_DIAGNOSES (
+
+    SHORT_TITLE VARCHAR(50) NOT NULL
+);
+
+Expert Knowledge:
+* Admissions refer to the rows in the ADMISSIONS table;
+* Admission time is the value in the ADMISSION_DATE column;
+* Discharge time is the value in the DISCHARGE_DATE column;
+* We want to list all admissions with their admission and discharge times.
+
+--------------------------------------------------------------------------------
+
+Question: Find emergency admissions with \"MEDICARE\" insurance.
+
+Relevant Tables and Columns:
+  ICUSTAYS: FIRST_CAREUNIT, LAST_CAREUNIT
+  TRANSFERS: CAREUNIT
+  ADMISSIONS: DISCHARGE_LOCATION
+  COST: CHARGETIME
+
+Reduced Schema:
+CREATE TABLE ICUSTAYS (
+
+    FIRST_CAREUNIT VARCHAR(20) NOT NULL,
+
+    LAST_CAREUNIT VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE TRANSFERS (
+
+    CAREUNIT VARCHAR(20)
+);
+
+CREATE TABLE ADMISSIONS (
+
+    DISCHARGE_LOCATION VARCHAR(50)
+);
+
+CREATE TABLE COST (
+
+    CHARGETIME TIMESTAMP(0) NOT NULL
+);
+
+Expert Knowledge:
+* An emergency admission is indicated by a value of 'EMERGENCY' in the ADMISSION_TYPE column;
+* MEDICARE is an insurance provider; insurance provider can be found in the INSURANCE column.
+
+--------------------------------------------------------------------------------
+
+Question: Show admissions with ICU stays longer than 7 days
+
+Relevant Tables and Columns:
+  CHARTEVENTS: ICUSTAY_ID
+  INPUTEVENTS_CV: ICUSTAY_ID
+  OUTPUTEVENTS: ICUSTAY_ID
+  ICUSTAYS: ICUSTAY_ID
+  TRANSFERS: ICUSTAY_ID
+
+Reduced Schema:
+CREATE TABLE CHARTEVENTS (
+
+    ICUSTAY_ID INT NOT NULL,
+
+    FOREIGN KEY(ICUSTAY_ID) REFERENCES ICUSTAYS(ICUSTAY_ID)
+);
+
+CREATE TABLE INPUTEVENTS_CV (
+
+    ICUSTAY_ID INT NOT NULL,
+
+    FOREIGN KEY(ICUSTAY_ID) REFERENCES ICUSTAYS(ICUSTAY_ID)
+);
+
+CREATE TABLE OUTPUTEVENTS (
+
+    ICUSTAY_ID INT NOT NULL,
+
+    FOREIGN KEY(ICUSTAY_ID) REFERENCES ICUSTAYS(ICUSTAY_ID)
+);
+
+CREATE TABLE ICUSTAYS (
+
+    ICUSTAY_ID INT NOT NULL
+);
+
+CREATE TABLE TRANSFERS (
+
+    ICUSTAY_ID INT
+);
+
+Expert Knowledge:
+* Admissions refer to the events in the INPUTEVENTS table where the EVENT_TYPE = 'ADMISSION';
+* ICU stays longer than 7 days refer to the events in the OUTPUTEVENTS table where the DURATION > 7;
+
+--------------------------------------------------------------------------------
+

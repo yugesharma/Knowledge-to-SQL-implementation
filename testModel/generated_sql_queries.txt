@@ -1,0 +1,10 @@
+Question: Show admissions with ICU stays longer than 7 days
+
+Expert Knowledge:
+Admission ID (primary key)\n* Patient ID (foreign key referencing Patient ID)\n* Date of Admission (when the patient was admitted)\n* Date of Discharge (when the patient was discharged)\n* ICU stay refers to the duration of time the patient spent in the intensive care unit (ICU); this is calculated as the difference between the Date of Discharge and Date of Admission
+
+SQL Query:
+SELECT * FROM ADMISSIONS WHERE ICU_STAY > 7;
+
+--------------------------------------------------------------------------------
+

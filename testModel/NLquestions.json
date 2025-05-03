@@ -1,0 +1,78 @@
+[
+  {
+    "category": "basic",
+    "question": "How many patients are there in the database?",
+    "sql": "SELECT COUNT(DISTINCT subject_id) AS total_patients FROM patients;"
+  },
+  {
+    "category": "basic",
+    "question": "List all admissions with their admission and discharge times.",
+    "sql": "SELECT hadm_id, admittime, dischtime FROM admissions;"
+  },
+  {
+    "category": "conditional",
+    "question": "Show female patients born after January 1, 2000.",
+    "sql": "SELECT subject_id, dob FROM patients WHERE gender = 'F' AND dob > '2000-01-01';"
+  },
+  {
+    "category": "conditional",
+    "question": "Find emergency admissions with \"MEDICARE\" insurance.",
+    "sql": "SELECT hadm_id, admittime FROM admissions WHERE admission_type = 'EMERGENCY' AND insurance = 'MEDICARE';"
+  },
+  {
+    "category": "conditional",
+    "question": "List patients who died in the hospital (DOD is not null).",
+    "sql": "SELECT subject_id, dod FROM patients WHERE dod IS NOT NULL;"
+  },
+  {
+    "category": "time",
+    "question": "Show admissions occurring in the year 2100.",
+    "sql": "SELECT hadm_id, admittime FROM admissions WHERE EXTRACT(YEAR FROM admittime) = 2100;"
+  },
+  {
+    "category": "time",
+    "question": "Find prescriptions started in December 2130.",
+    "sql": "SELECT drug, dose_val_rx FROM prescriptions WHERE EXTRACT(MONTH FROM startdate) = 12 AND EXTRACT(YEAR FROM startdate) = 2130;"
+  },
+  {
+    "category": "time",
+    "question": "List diagnoses recorded on March 15, 2125.",
+    "sql": "SELECT d.long_title FROM diagnoses_icd di JOIN d_icd_diagnoses d ON di.icd9_code = d.icd9_code WHERE DATE(di.charttime) = '2125-03-15';"
+  },
+  {
+    "category": "nested",
+    "question": "Find patients who never received prescriptions.",
+    "sql": "SELECT subject_id FROM patients WHERE subject_id NOT IN (SELECT DISTINCT subject_id FROM prescriptions);"
+  },
+  {
+    "category": "nested",
+    "question": "Show admissions with ICU stays longer than 7 days.",
+    "sql": "SELECT hadm_id FROM icustays WHERE (outtime - intime) > INTERVAL '7 days';"
+  },
+  {
+    "category": "nested",
+    "question": "List patients who underwent \"Appendectomy\" procedures.",
+    "sql": "SELECT p.subject_id FROM patients p WHERE EXISTS (SELECT 1 FROM procedures_icd pi JOIN d_icd_procedures dp ON pi.icd9_code = dp.icd9_code WHERE pi.subject_id = p.subject_id AND dp.short_title = 'Appendectomy');"
+  },
+  {
+    "category": "slightly complex",
+    "question": "Show average lab values for \"Glucose\" tests.",
+    "sql": "SELECT AVG(valuenum) AS avg_glucose FROM labevents WHERE itemid = (SELECT itemid FROM d_labitems WHERE label = 'Glucose');"
+  },
+  {
+    "category": "slightly complex",
+    "question": "Calculate total cost per admission for medication events.",
+    "sql": "SELECT c.hadm_id, SUM(c.cost) AS total_med_cost FROM cost c JOIN prescriptions p ON c.event_id = p.row_id WHERE c.event_type = 'MEDICATION' GROUP BY c.hadm_id;"
+  },
+  {
+    "category": "complex",
+    "question": "Find ICU patients diagnosed with \"Diabetes\" and their total costs.",
+    "sql": "SELECT i.subject_id, SUM(c.cost) AS total_cost FROM icustays i JOIN diagnoses_icd di ON i.hadm_id = di.hadm_id JOIN d_icd_diagnoses dd ON di.icd9_code = dd.icd9_code JOIN cost c ON di.row_id = c.event_id WHERE dd.short_title LIKE '%Diabetes%' GROUP BY i.subject_id;"
+  },
+  {
+    "category": "complex",
+    "question": "Show average age at admission by diagnosis category.",
+    "sql": "WITH diagnosis_groups AS (SELECT di.hadm_id, dd.short_title, AVG(a.age) AS avg_age FROM diagnoses_icd di JOIN d_icd_diagnoses dd ON di.icd9_code = dd.icd9_code JOIN admissions a ON di.hadm_id = a.hadm_id GROUP BY di.hadm_id, dd.short_title) SELECT short_title, AVG(avg_age) AS overall_avg_age FROM diagnosis_groups GROUP BY short_title;"
+  }
+]
+

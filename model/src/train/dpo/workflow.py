@@ -27,7 +27,13 @@ def run_dpo(
 ):
 
     model, tokenizer = load_model_and_tokenizer(model_args, finetuning_args, training_args.do_train)
-    dataset = get_dataset(model_args, data_args, tokenizer, training_args, stage="rm")
+    
+    # Add this block to ensure pad token is set
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+        print(f"Pad token was not set. Setting pad_token to eos_token: {tokenizer.eos_token}")
+    
+    dataset = get_dataset(model_args, data_args)
     data_collator = DPODataCollatorWithPadding(
         tokenizer=tokenizer,
         pad_to_multiple_of=8,
