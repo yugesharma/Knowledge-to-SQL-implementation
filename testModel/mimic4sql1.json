@@ -1,0 +1,658 @@
+[
+  {
+    "query_num": 1,
+    "question": "Show all patient IDs and their genders",
+    "original_sql": {
+      "sql": "SELECT subject_id, gender FROM patients;",
+      "execution_time": 0.01766289584338665,
+      "results": [
+        [
+          10014729,
+          "f"
+        ],
+        [
+          10003400,
+          "f"
+        ],
+        [
+          10002428,
+          "f"
+        ],
+        [
+          10027445,
+          "f"
+        ],
+        [
+          10037928,
+          "f"
+        ],
+        [
+          10001725,
+          "f"
+        ],
+        [
+          10040025,
+          "f"
+        ],
+        [
+          10008454,
+          "f"
+        ],
+        [
+          10014078,
+          "f"
+        ],
+        [
+          10007795,
+          "f"
+        ]
+      ]
+    },
+    "generated_sql": {
+      "sql": "SELECT subject_id, gender FROM patients",
+      "execution_time": 0.005141774192452431,
+      "is_valid": 1
+    },
+    "ves": 0.7088940433073088
+  },
+  {
+    "query_num": 2,
+    "question": "List all admission IDs and admission types",
+    "original_sql": {
+      "sql": "SELECT hadm_id, admission_type FROM admissions;",
+      "execution_time": 0.013715479522943497,
+      "results": [
+        [
+          24181354,
+          "urgent"
+        ],
+        [
+          25926192,
+          "urgent"
+        ],
+        [
+          22942076,
+          "urgent"
+        ],
+        [
+          21606243,
+          "urgent"
+        ],
+        [
+          20626031,
+          "urgent"
+        ],
+        [
+          20297618,
+          "urgent"
+        ],
+        [
+          24982426,
+          "urgent"
+        ],
+        [
+          20755971,
+          "urgent"
+        ],
+        [
+          22585261,
+          "urgent"
+        ],
+        [
+          24256866,
+          "urgent"
+        ]
+      ]
+    },
+    "generated_sql": {
+      "sql": "SELECT hadm_id, admission_type FROM admissions",
+      "execution_time": 0.010483669117093086,
+      "is_valid": 1
+    },
+    "ves": 0.23563233064102362
+  },
+  {
+    "query_num": 3,
+    "question": "Find all female patients",
+    "original_sql": {
+      "sql": "SELECT * FROM patients WHERE gender = 'F';",
+      "execution_time": 0.004443363286554813,
+      "results": []
+    },
+    "generated_sql": {
+      "sql": "SELECT * FROM patients WHERE gender = 'F' AND EXISTS (SELECT * FROM transfers WHERE subject_id = patients.subject_id AND careunit = 'ICU' AND outtime > '2012-01-01');",
+      "execution_time": 0.0038705095648765564,
+      "is_valid": 1
+    },
+    "ves": 0.12892344936360634
+  },
+  {
+    "query_num": 4,
+    "question": "Show emergency admissions",
+    "original_sql": {
+      "sql": "SELECT * FROM admissions WHERE admission_type = 'EMERGENCY';",
+      "execution_time": 0.004892473109066486,
+      "results": []
+    },
+    "generated_sql": {
+      "sql": "SELECT COUNT(*) FROM admissions WHERE admittime < CURRENT_DATE AND admission_type = 'emergency';",
+      "execution_time": 0.004256855696439743,
+      "is_valid": 1
+    },
+    "ves": 0.12991740546286268
+  },
+  {
+    "query_num": 5,
+    "question": "Find patients older than 65",
+    "original_sql": {
+      "sql": "SELECT * FROM patients WHERE EXTRACT(YEAR FROM dob) < (EXTRACT(YEAR FROM CURRENT_DATE) - 65);",
+      "error": "near \"FROM\": syntax error"
+    },
+    "generated_sql": {
+      "sql": "SELECT * FROM patients WHERE age > 65;",
+      "error": "no such column: age",
+      "is_valid": 0
+    },
+    "ves": 0
+  },
+  {
+    "query_num": 6,
+    "question": "List admissions in the year 2100",
+    "original_sql": {
+      "sql": "SELECT * FROM admissions WHERE EXTRACT(YEAR FROM admittime) = 2100;",
+      "error": "near \"FROM\": syntax error"
+    },
+    "generated_sql": {
+      "sql": "SELECT * FROM admissions WHERE dischtime = strftime('%Y', 2100);",
+      "execution_time": 0.030011837370693684,
+      "is_valid": 1
+    },
+    "ves": null
+  },
+  {
+    "query_num": 7,
+    "question": "Find prescriptions started after 2100-01-01",
+    "original_sql": {
+      "sql": "SELECT * FROM prescriptions WHERE starttime > '2100-01-01';",
+      "execution_time": 0.2380907004699111,
+      "results": [
+        [
+          0,
+          10020740,
+          23831430,
+          "2100-04-19 11:00:00",
+          "2100-04-20 22:00:00",
+          "insulin",
+          "0.0",
+          "unit",
+          "sc"
+        ],
+        [
+          1,
+          10005817,
+          20626031,
+          "2100-12-20 02:00:00",
+          "2100-12-21 12:00:00",
+          "insulin",
+          "0.0",
+          "unit",
+          "sc"
+        ],
+        [
+          2,
+          10005817,
+          20626031,
+          "2100-12-27 10:00:00",
+          "2100-12-28 19:00:00",
+          "insulin",
+          "0.0",
+          "unit",
+          "sc"
+        ],
+        [
+          3,
+          10005817,
+          20626031,
+          "2100-12-25 19:00:00",
+          "2100-12-27 09:00:00",
+          "insulin",
+          "0.0",
+          "unit",
+          "sc"
+        ],
+        [
+          4,
+          10020740,
+          23831430,
+          "2100-04-23 22:00:00",
+          "2100-04-27 17:00:00",
+          "insulin",
+          "0.0",
+          "unit",
+          "sc"
+        ],
+        [
+          5,
+          10020740,
+          23831430,
+          "2100-04-07 17:00:00",
+          "2100-04-09 15:00:00",
+          "insulin",
+          "0.0",
+          "unit",
+          "sc"
+        ],
+        [
+          6,
+          10019385,
+          20297618,
+          "2100-03-13 11:00:00",
+          "2100-03-13 20:00:00",
+          "insulin",
+          "0.0",
+          "unit",
+          "sc"
+        ],
+        [
+          7,
+          10005817,
+          20626031,
+          "2100-12-24 17:00:00",
+          "2100-12-25 18:00:00",
+          "insulin",
+          "0.0",
+          "unit",
+          "sc"
+        ],
+        [
+          8,
+          10016810,
+          20973395,
+          "2100-07-07 03:00:00",
+          "2100-07-12 20:00:00",
+          "insulin",
+          "0.0",
+          "unit",
+          "sc"
+        ],
+        [
+          9,
+          10021118,
+          24490144,
+          "2100-12-06 12:00:00",
+          "2100-12-07 11:00:00",
+          "insulin",
+          "0.0",
+          "unit",
+          "sc"
+        ]
+      ]
+    },
+    "generated_sql": {
+      "sql": "SELECT * FROM prescriptions WHERE starttime > '2100-01-01';",
+      "execution_time": 0.025608179159462452,
+      "is_valid": 1
+    },
+    "ves": 0.8924435977175064
+  },
+  {
+    "query_num": 8,
+    "question": "Show ICU stays longer than 7 days",
+    "original_sql": {
+      "sql": "SELECT * FROM icustays WHERE (outtime - intime) > INTERVAL '7 days';",
+      "error": "near \"'7 days'\": syntax error"
+    },
+    "generated_sql": {
+      "sql": "SELECT * FROM icustays WHERE stay_id > 7;",
+      "execution_time": 0.014706253074109554,
+      "is_valid": 1
+    },
+    "ves": null
+  },
+  {
+    "query_num": 9,
+    "question": "Find patients with ICU stays",
+    "original_sql": {
+      "sql": "SELECT * FROM patients WHERE subject_id IN (SELECT subject_id FROM icustays);",
+      "execution_time": 0.007077177986502647,
+      "results": [
+        [
+          21,
+          10000032,
+          "f",
+          "2048-08-04 00:00:00",
+          "2100-09-29 00:00:00"
+        ],
+        [
+          10,
+          10001217,
+          "f",
+          "2045-07-30 00:00:00",
+          null
+        ],
+        [
+          5,
+          10001725,
+          "f",
+          "2054-07-19 00:00:00",
+          null
+        ],
+        [
+          76,
+          10002495,
+          "m",
+          "2019-07-27 00:00:00",
+          null
+        ],
+        [
+          42,
+          10003046,
+          "m",
+          "2036-07-30 00:00:00",
+          null
+        ],
+        [
+          74,
+          10004235,
+          "m",
+          "2053-08-09 00:00:00",
+          null
+        ],
+        [
+          47,
+          10004422,
+          "m",
+          "2022-07-20 00:00:00",
+          null
+        ],
+        [
+          66,
+          10004720,
+          "m",
+          "2036-08-06 00:00:00",
+          "2100-12-08 00:00:00"
+        ],
+        [
+          89,
+          10004733,
+          "m",
+          "2049-08-03 00:00:00",
+          null
+        ],
+        [
+          84,
+          10005817,
+          "m",
+          "2034-07-25 00:00:00",
+          null
+        ]
+      ]
+    },
+    "generated_sql": {
+      "sql": "SELECT * FROM icustays WHERE intime < transfer_id AND outtime > transfer_id AND intime < transfer_id AND outtime > transfer_id",
+      "error": "no such column: transfer_id",
+      "is_valid": 0
+    },
+    "ves": 0
+  },
+  {
+    "query_num": 10,
+    "question": "Show diagnoses not matching any ICD codes",
+    "original_sql": {
+      "sql": "SELECT * FROM diagnoses_icd WHERE icd_code NOT IN (SELECT icd_code FROM d_icd_diagnoses);",
+      "execution_time": 0.25396049302071333,
+      "results": []
+    },
+    "generated_sql": {
+      "sql": "SELECT COUNT(*) FROM diagnoses_icd WHERE NOT EXISTS (SELECT 1 FROM d_icd_diagnoses WHERE d_icd_diagnoses.icd_code = diagnoses_icd.icd_code);",
+      "execution_time": 0.005610201507806778,
+      "is_valid": 1
+    },
+    "ves": 0.9779091564948679
+  },
+  {
+    "query_num": 11,
+    "question": "Find medications prescribed to patients with diabetes",
+    "original_sql": {
+      "sql": "SELECT * FROM prescriptions WHERE hadm_id IN (SELECT hadm_id FROM diagnoses_icd WHERE icd_code LIKE '250%');",
+      "execution_time": 0.0070839449763298035,
+      "results": []
+    },
+    "generated_sql": {
+      "sql": "SELECT DISTINCT d_items.label FROM d_items INNER JOIN prescriptions ON d_items.itemid = prescriptions.drug INNER JOIN diagnoses_icd ON prescriptions.subject_id = diagnoses_icd.subject_id INNER JOIN d_icd_diagnoses ON diagnoses_icd.icd_code = d_icd_diagnoses.icd_code WHERE d_icd_diagnoses.long_title = 'Diabetes Mellitus' GROUP BY d_items.label ORDER BY COUNT(*) DESC LIMIT 10",
+      "execution_time": 0.6592572210356593,
+      "is_valid": 1
+    },
+    "ves": 0
+  },
+  {
+    "query_num": 12,
+    "question": "List patient demographics with admission details",
+    "original_sql": {
+      "sql": "SELECT p.subject_id, p.gender, a.admission_type, a.admittime FROM patients p INNER JOIN admissions a ON p.subject_id = a.subject_id;",
+      "execution_time": 0.013366605155169964,
+      "results": [
+        [
+          10004235,
+          "m",
+          "urgent",
+          "2100-03-19 14:38:00"
+        ],
+        [
+          10009628,
+          "m",
+          "urgent",
+          "2100-09-30 17:08:00"
+        ],
+        [
+          10006053,
+          "m",
+          "urgent",
+          "2100-11-15 23:39:00"
+        ],
+        [
+          10031404,
+          "f",
+          "urgent",
+          "2100-08-07 18:46:00"
+        ],
+        [
+          10005817,
+          "m",
+          "urgent",
+          "2100-12-20 01:43:00"
+        ],
+        [
+          10019385,
+          "m",
+          "urgent",
+          "2100-03-06 20:28:00"
+        ],
+        [
+          10002495,
+          "m",
+          "urgent",
+          "2100-06-01 20:17:00"
+        ],
+        [
+          10038081,
+          "f",
+          "urgent",
+          "2100-09-30 20:40:00"
+        ],
+        [
+          10019917,
+          "m",
+          "urgent",
+          "2100-01-27 23:25:00"
+        ],
+        [
+          10037861,
+          "m",
+          "urgent",
+          "2100-10-12 20:28:00"
+        ]
+      ]
+    },
+    "generated_sql": {
+      "sql": "SELECT T1.first_name, T1.last_name, T1.gender, T1.dob, T1.dod, T2.admittime, T2.dischtime, T2.admission_type, T2.admission_location, T2.discharge_location, T2.insurance, T2.language, T2.marital_status, T2.age FROM patients AS T1 JOIN admissions AS T2 ON T1.subject_id = T2.subject_id;",
+      "error": "no such column: T1.first_name",
+      "is_valid": 0
+    },
+    "ves": 0
+  },
+  {
+    "query_num": 13,
+    "question": "Show lab tests with reference ranges",
+    "original_sql": {
+      "sql": "SELECT l.subject_id, d.label, l.valuenum, l.valueuom FROM labevents l INNER JOIN d_labitems d ON l.itemid = d.itemid;",
+      "execution_time": 0.5686333328485489,
+      "results": [
+        [
+          10031757,
+          "phosphate",
+          2.8,
+          "mg/dl"
+        ],
+        [
+          10031757,
+          "glucose",
+          91.0,
+          "mg/dl"
+        ],
+        [
+          10031757,
+          "anion gap",
+          14.0,
+          "meq/l"
+        ],
+        [
+          10031757,
+          "magnesium",
+          2.0,
+          "mg/dl"
+        ],
+        [
+          10031757,
+          "albumin",
+          2.3,
+          "g/dl"
+        ],
+        [
+          10031757,
+          "bilirubin, total",
+          0.3,
+          "mg/dl"
+        ],
+        [
+          10031757,
+          "creatinine",
+          0.9,
+          "mg/dl"
+        ],
+        [
+          10031757,
+          "alanine aminotransferase (alt)",
+          216.0,
+          "iu/l"
+        ],
+        [
+          10031757,
+          "sodium",
+          133.0,
+          "meq/l"
+        ],
+        [
+          10031757,
+          "calcium, total",
+          8.0,
+          "mg/dl"
+        ]
+      ]
+    },
+    "generated_sql": {
+      "sql": "SELECT d_labitems.label FROM d_labitems WHERE d_labitems.label IN (SELECT ref FROM d_items);",
+      "error": "no such column: ref",
+      "is_valid": 0
+    },
+    "ves": 0
+  },
+  {
+    "query_num": 14,
+    "question": "Find average lab values by test type",
+    "original_sql": {
+      "sql": "SELECT d.label, AVG(l.valuenum) as avg_value FROM labevents l INNER JOIN d_labitems d ON l.itemid = d.itemid GROUP BY d.label HAVING AVG(l.valuenum) IS NOT NULL;",
+      "execution_time": 0.028404736891388893,
+      "results": [
+        [
+          "% hemoglobin a1c",
+          7.209999999999999
+        ],
+        [
+          "25-oh vitamin d",
+          25.5
+        ],
+        [
+          "absolute basophil count",
+          0.033095238095238094
+        ],
+        [
+          "absolute eosinophil count",
+          0.17714285714285713
+        ],
+        [
+          "absolute lymphocyte count",
+          3.881666666666667
+        ],
+        [
+          "absolute monocyte count",
+          1.0219047619047619
+        ],
+        [
+          "absolute neutrophil count",
+          12.243571428571428
+        ],
+        [
+          "alanine aminotransferase (alt)",
+          217.04
+        ],
+        [
+          "albumin",
+          3.2162393162393164
+        ],
+        [
+          "albumin, ascites",
+          1.8
+        ]
+      ]
+    },
+    "generated_sql": {
+      "sql": "SELECT AVG(valuenum) FROM d_labitems WHERE label = 'Test Type' AND subject_id = 1 AND stay_id = 1 AND intime < '2010-01-01' Given question: Find average lab values by test type for patient with subject id 1 and;",
+      "error": "near \"Given\": syntax error",
+      "is_valid": 0
+    },
+    "ves": 0
+  },
+  {
+    "query_num": 15,
+    "question": "Calculate total medication cost per patient",
+    "original_sql": {
+      "sql": "SELECT p.subject_id, SUM(c.cost) as total_cost FROM patients p INNER JOIN admissions a ON p.subject_id = a.subject_id INNER JOIN cost c ON a.hadm_id = c.hadm_id WHERE c.event_type = 'prescription' GROUP BY p.subject_id;",
+      "execution_time": 0.5554181160405278,
+      "results": []
+    },
+    "generated_sql": {
+      "sql": "SELECT COUNT(*) FROM patients AS T1 WHERE NOT EXISTS (SELECT 1 FROM prescriptions AS T2 WHERE T1.subject_id = T2.subject_id);",
+      "execution_time": 0.18133149668574333,
+      "is_valid": 1
+    },
+    "ves": 0.6735225383384651
+  },
+  {
+    "summary": {
+      "total_queries": 15,
+      "valid_ves_count": 8,
+      "average_ves": 0.4684053151657051
+    }
+  }
+]

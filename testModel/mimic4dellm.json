@@ -1,0 +1,92 @@
+[
+  {
+    "category": "Basic",
+    "question": "Show all patient IDs and their genders",
+    "sql_query": "SELECT subject_id, gender FROM patients;",
+    "expert_knowledge": "ICD codes refer to icd_code; gender refers to gender"
+  },
+  {
+    "category": "Basic",
+    "question": "List all admission IDs and admission types",
+    "sql_query": "SELECT hadm_id, admission_type FROM admissions;",
+    "expert_knowledge": "Admission IDs refer to hadm_id; admission types refer to admission_type;"
+  },
+  {
+    "category": "Conditional",
+    "question": "Find all female patients",
+    "sql_query": "SELECT * FROM patients WHERE gender = 'F';",
+    "expert_knowledge": "female = gender = 'F';"
+  },
+  {
+    "category": "Conditional",
+    "question": "Show emergency admissions",
+    "sql_query": "SELECT * FROM admissions WHERE admission_type = 'EMERGENCY';",
+    "expert_knowledge": "emergency admissions refers to admissions_type = 'emergency'"
+  },
+  {
+    "category": "Conditional",
+    "question": "Find patients older than 65",
+    "sql_query": "SELECT * FROM patients WHERE EXTRACT(YEAR FROM dob) < (EXTRACT(YEAR FROM CURRENT_DATE) - 65);",
+    "expert_knowledge": "older than 65 refers to age > 65"
+  },
+  {
+    "category": "Time",
+    "question": "List admissions in the year 2100",
+    "sql_query": "SELECT * FROM admissions WHERE EXTRACT(YEAR FROM admittime) = 2100;",
+    "expert_knowledge": "year(dischtime) = 2100"
+  },
+  {
+    "category": "Time",
+    "question": "Find prescriptions started after 2100-01-01",
+    "sql_query": "SELECT * FROM prescriptions WHERE starttime > '2100-01-01';",
+    "expert_knowledge": "started after 2100-01-01 refers to starttime > '2100-01-01';"
+  },
+  {
+    "category": "Time",
+    "question": "Show ICU stays longer than 7 days",
+    "sql_query": "SELECT * FROM icustays WHERE (outtime - intime) > INTERVAL '7 days';",
+    "expert_knowledge": "longer than 7 days refers to stay_id > 7;"
+  },
+  {
+    "category": "Nested",
+    "question": "Find patients with ICU stays",
+    "sql_query": "SELECT * FROM patients WHERE subject_id IN (SELECT subject_id FROM icustays);",
+    "expert_knowledge": "ICU refers to careunit = 'intensive care unit'"
+  },
+  {
+    "category": "Nested",
+    "question": "Show diagnoses not matching any ICD codes",
+    "sql_query": "SELECT * FROM diagnoses_icd WHERE icd_code NOT IN (SELECT icd_code FROM d_icd_diagnoses);",
+    "expert_knowledge": "ICD code mappings refers to long_title; Lab test identifiers refers to itemid; time calculations refers to subtract(dischtime, admittime); medication routes refers to route; not matching refers to false;"
+  },
+  {
+    "category": "Nested",
+    "question": "Find medications prescribed to patients with diabetes",
+    "sql_query": "SELECT * FROM prescriptions WHERE hadm_id IN (SELECT hadm_id FROM diagnoses_icd WHERE icd_code LIKE '250%');",
+    "expert_knowledge": "diabetes refers to long_title = 'Diabetes Mellitus'; medication refers to drug;"
+  },
+  {
+    "category": "Slightly Complex",
+    "question": "List patient demographics with admission details",
+    "sql_query": "SELECT p.subject_id, p.gender, a.admission_type, a.admittime FROM patients p INNER JOIN admissions a ON p.subject_id = a.subject_id;",
+    "expert_knowledge": "'first_name'"
+  },
+  {
+    "category": "Slightly Complex",
+    "question": "Show lab tests with reference ranges",
+    "sql_query": "SELECT l.subject_id, d.label, l.valuenum, l.valueuom FROM labevents l INNER JOIN d_labitems d ON l.itemid = d.itemid;",
+    "expert_knowledge": "lab tests refers to labitem.label; reference ranges refers to ref;"
+  },
+  {
+    "category": "Complex",
+    "question": "Find average lab values by test type",
+    "sql_query": "SELECT d.label, AVG(l.valuenum) as avg_value FROM labevents l INNER JOIN d_labitems d ON l.itemid = d.itemid GROUP BY d.label HAVING AVG(l.valuenum) IS NOT NULL;",
+    "expert_knowledge": "average lab values refers to Avg(valuenum); test type refers to spec_type_desc;"
+  },
+  {
+    "category": "Complex",
+    "question": "Calculate total medication cost per patient",
+    "sql_query": "SELECT p.subject_id, SUM(c.cost) as total_cost FROM patients p INNER JOIN admissions a ON p.subject_id = a.subject_id INNER JOIN cost c ON a.hadm_id = c.hadm_id WHERE c.event_type = 'prescription' GROUP BY p.subject_id;",
+    "expert_knowledge": "total medication cost = sum(cost where drug is not null);"
+  }
+]
