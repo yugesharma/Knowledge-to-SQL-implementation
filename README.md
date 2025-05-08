@@ -30,11 +30,25 @@ Obtain access token for Weight and Balance from [here](https://wandb.ai/settings
 
 ## Training
 
+### SFT
 Make required changes to the sbatch file **run_llama2_sft.sh** according to your paths and system. You can also modify the training arguments as per your needs.
-Submit the sbatch file for training
+Submit the sbatch file for training.
+
+### DPO
+The directory _dpoDataPrep_ contain all dependencies for DPO training.
+- generateKowledge.py: Generates expert knowledge json file
+- generateSql.py: Generates pairs of SQL queries using both expert knowledge and gold knowledge
+- generateDpoData.py: For generating preference pairs
+- TokenizeForDpoTraining: Final step of data tokenization for DPO training
+- dpo_training.sh: Bash file to submit for DPO training
 
 Keep checking the .out file for status and *squeue --me* for status check.
 
 ## Output
 
 Once successfully completed, a directory **output** will get generated which will have all the files generated from the model training including the Lora weights for fine tuning.
+
+## Evaluation
+The directory _testModel_ contains various versions of files used for testing evaluating the model. The final tests and evaluations are based on natural language questions pertaining to MIMIC IV medical dataset. 
+- mimic4dellm.py: Outputs a json file containing expert knowledge for natural language questions
+- mimic4query.py: Generates a json file containing the generated SQL queries along with VES scores
